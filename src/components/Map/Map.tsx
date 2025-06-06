@@ -51,7 +51,11 @@ export default function Map({ pins, setMapRef }: Props) {
       <Ref></Ref>
       <LayersControl position="topright">
         {DEFAULT_TILES.map((tile) => (
-          <TileController key={tile.name} {...tile} />
+          <TileController 
+            key={tile.name} 
+            {...tile} 
+            defaultChecked={tile.id === 'dark'} 
+          />
         ))}
         {DEFAULT_FILTERS.map((filter: IFilter) => filterPins(pins, filter))}
       </LayersControl>

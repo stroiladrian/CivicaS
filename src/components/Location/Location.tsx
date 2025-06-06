@@ -14,7 +14,8 @@ const Location = ({
   map,
   setOpen,
   sortKey,
-  theme
+  theme,
+  photo
 }) => {
   const name = useMemo(() => getNameString(author), [author])
 
@@ -22,7 +23,11 @@ const Location = ({
     if (screen.width <= 438) {
       setOpen(false)
     }
-    map.flyTo(coordinates, 10)
+    map.panTo({
+      lat: Array.isArray(coordinates) ? coordinates[0] : coordinates.lat,
+      lng: Array.isArray(coordinates) ? coordinates[1] : coordinates.lng
+    })
+    map.setZoom(10)
   }
 
   const getItalic = () => {
@@ -43,12 +48,12 @@ const Location = ({
     <div className={`${styles.listings} ${theme === 'dark' ? styles.dark_theme : ''}`}>
       <div className={styles.marker} onClick={onClick}>
         <Image
-          src={`/images/markers/${type}-image.png`}
-          alt="Marker"
+          src={photo || `/images/markers/${type}-image.png`}
+          alt="Location"
           title="Go to pin"
           width={70}
           height={70}
-          objectFit="scale-down"
+          objectFit="cover"
         />
       </div>
       <div className={styles.text}>

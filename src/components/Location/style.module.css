@@ -55,7 +55,7 @@
 
 .title {
   cursor: pointer;
-  font: 700 16px 'brandon-grotesque', 'Avenir Next', 'Helvetica Neue',
+  font: 700 20.8px 'brandon-grotesque', 'Avenir Next', 'Helvetica Neue',
   'Helvetica', 'Arial', 'sans-serif';
 }
 
@@ -81,6 +81,6 @@
   }
 
   .title {
-    font-size: 14.5px;
+    font-size: 18.85px;
   }
 }

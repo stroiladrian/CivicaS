@@ -2,14 +2,33 @@ import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { PLACES } from 'src/data/places'
-import Sidebar from 'src/components/Sidebar'
-import Menu from 'src/components/Menu'
+import AddPinButton from 'src/components/AddPinButton/AddPinButton'
+import AddPinModal from 'src/components/AddPinModal/AddPinModal'
+import type { IPin } from 'src/lib/types'
 
 const Map = dynamic(() => import('src/components/Map'), { ssr: false })
 
 export default function Home() {
-  const [isOpen, setOpen] = useState<boolean>(false)
-  const [mapRef, setMapRef] = useState(null)
+  const [pins, setPins] = useState<IPin[]>(PLACES)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [mapCenter, setMapCenter] = useState({ lat: 45.3889, lng: 21.2244 }) // Deta, Timis
+  const [mapZoom, setMapZoom] = useState(14)
+
+  const handleAddPin = (newPin: Omit<IPin, 'id'>) => {
+    const pin: IPin = {
+      ...newPin,
+      id: Date.now().toString()
+    }
+    setPins(prev => [...prev, pin])
+  }
+
+  const handleMapCenterChange = (center: { lat: number; lng: number }) => {
+    setMapCenter(center)
+  }
+
+  const handleMapZoomChange = (zoom: number) => {
+    setMapZoom(zoom)
+  }
 
   return (
     <div>
@@ -50,16 +69,20 @@ export default function Home() {
         />
         <meta name="google-site-verification" content="QabE4pgOKR5rQ45trqzVGARIOV6c3OB0FW_ZBUJtQqQ" />
       </Head>
-      <Menu isOpen={isOpen} setOpen={setOpen} />
-      <Sidebar
-        mapRef={mapRef}
-        isOpen={isOpen}
-        setOpen={setOpen}
-        pins={PLACES}
-      />
       <div className="map">
-        <Map setMapRef={setMapRef} pins={PLACES} />
+        <Map 
+          pins={pins} 
+          onCenterChange={handleMapCenterChange}
+          onZoomChange={handleMapZoomChange}
+        />
       </div>
+      <AddPinButton onClick={() => setIsModalOpen(true)} />
+      <AddPinModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleAddPin}
+        initialCoordinates={mapCenter}
+      />
     </div>
   )
 }

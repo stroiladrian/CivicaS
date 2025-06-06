@@ -25,5 +25,18 @@ module.exports = withConfig({
     BUG_TRACKER: pkg.bugs,
     REPOSITORY_URL: pkg.repository.url,
     COMMIT_HASH: commitHash
+  },
+  experimental: {
+    esmExternals: true
+  },
+  webpack: (config, { isServer }) => {
+    // Add support for ES modules
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      net: false,
+      tls: false
+    }
+    return config
   }
 })

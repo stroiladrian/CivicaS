@@ -1,0 +1,36 @@
+.addPinButton {
+  position: fixed;
+  bottom: 30vh;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4ab8a9;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 20px 40px;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.addPinButton:hover {
+  background-color: #043a46;
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.addPinButton:active {
+  transform: translateX(-50%) translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+  font-size: 24px;
+  font-weight: 700;
+} 

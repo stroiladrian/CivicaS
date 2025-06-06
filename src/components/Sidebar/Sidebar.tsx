@@ -145,6 +145,7 @@ export default function Sidebar({ pins, isOpen, setOpen, mapRef }: Props) {
                     setOpen={setOpen}
                     sortKey={sortKey}
                     theme={theme}
+                    photo={pin.photo}
                   />
                 ))}
               </div>

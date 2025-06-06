@@ -1,4 +1,48 @@
-# Take you there
+# Take You There
+
+A web application for sharing and discovering places around the world.
+
+## Features
+
+- Interactive map with custom markers
+- Add new locations with photos
+- Persistent storage of pins
+- Responsive design
+
+## Deployment
+
+This project is deployed on Vercel. To deploy your own version:
+
+1. Fork this repository
+2. Create a Vercel account at https://vercel.com
+3. Connect your GitHub repository to Vercel
+4. Add your Google Maps API key in the Vercel environment variables:
+   - Name: `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
+   - Value: Your Google Maps API key
+
+## Local Development
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env.local` file with your Google Maps API key:
+   ```
+   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_api_key_here
+   ```
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+## Technologies Used
+
+- Next.js
+- React
+- Google Maps API
+- TypeScript
+- CSS Modules
 
 <p align="center">
   <a href="https://takeyouthere.vercel.app">

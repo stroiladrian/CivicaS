@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import Image from 'next/image'
 import styles from './style.module.css'
 import type { IPin } from 'src/lib/types'
 import { EPinType } from 'src/lib/types'
@@ -17,7 +18,7 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
     title: '',
     city: '',
     country: '',
-    coordinates: initialCoordinates ? [initialCoordinates.lat, initialCoordinates.lng] : [0, 0],
+    coordinates: initialCoordinates ? [initialCoordinates.lat, initialCoordinates.lng] as [number, number] : [0, 0] as [number, number],
     date: new Date().toISOString().split('T')[0],
     photo: '',
     type: EPinType.Picture
@@ -137,11 +138,16 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
             className={styles.cameraInput}
           />
           {formData.photo && (
-            <img
-              src={formData.photo}
-              alt="Preview"
-              className={`${styles.photoPreview} ${styles.visible}`}
-            />
+            <div className={styles.photoPreviewContainer}>
+              <Image
+                src={formData.photo}
+                alt="Preview"
+                width={400}
+                height={300}
+                className={styles.photoPreview}
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
           )}
           {error && <div className={styles.error}>{error}</div>}
           <div className={styles.buttonGroup}>

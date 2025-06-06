@@ -7,36 +7,22 @@ const commitHash = require('child_process')
   .toString()
   .trim()
 
-/**
- * @type {import('next').NextConfig}
- **/
-
-const { withGlobalCss } = require('next-global-css')
-
-const withConfig = withGlobalCss()
-
-module.exports = withConfig({
-  env: {
-    APP_NAME: pkg.name,
-    APP_DESCRIPTION: pkg.description,
-    APP_VERSION: pkg.version,
-    APP_LICENSE: pkg.license,
-    HOMEPAGE: pkg.homepage,
-    BUG_TRACKER: pkg.bugs,
-    REPOSITORY_URL: pkg.repository.url,
-    COMMIT_HASH: commitHash
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  images: {
+    domains: ['localhost'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
-  experimental: {
-    esmExternals: true
-  },
-  webpack: (config, { isServer }) => {
-    // Add support for ES modules
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-      net: false,
-      tls: false
-    }
+  webpack: (config) => {
+    config.resolve.fallback = { fs: false, path: false }
     return config
-  }
-})
+  },
+}
+
+module.exports = nextConfig

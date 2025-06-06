@@ -216,6 +216,8 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
   useEffect(() => {
     if (!map) return
 
+    const mapElement = mapRef.current
+
     // Add center change listener
     const centerListener = map.addListener('center_changed', () => {
       const center = map.getCenter()
@@ -266,7 +268,7 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
       }
     }
 
-    mapRef.current?.addEventListener('wheel', wheelHandler, { passive: false })
+    mapElement?.addEventListener('wheel', wheelHandler, { passive: false })
 
     // Cleanup function
     return () => {
@@ -274,7 +276,7 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
       google.maps.event.removeListener(zoomListener)
       google.maps.event.removeListener(dragStartListener)
       google.maps.event.removeListener(dragEndListener)
-      mapRef.current?.removeEventListener('wheel', wheelHandler)
+      mapElement?.removeEventListener('wheel', wheelHandler)
     }
   }, [map, onCenterChange, onZoomChange, currentZoom])
 

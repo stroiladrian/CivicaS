@@ -7,7 +7,7 @@ interface AddPinModalProps {
   isOpen: boolean
   onClose: () => void
   onSubmit: (pin: Omit<IPin, 'id'>) => void
-  initialCoordinates: { lat: number; lng: number }
+  initialCoordinates?: { lat: number; lng: number }
 }
 
 export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordinates }: AddPinModalProps) {
@@ -17,7 +17,7 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
     title: '',
     city: '',
     country: '',
-    coordinates: [initialCoordinates.lat, initialCoordinates.lng],
+    coordinates: initialCoordinates ? [initialCoordinates.lat, initialCoordinates.lng] : [0, 0],
     date: new Date().toISOString().split('T')[0],
     photo: '',
     type: EPinType.Picture
@@ -55,6 +55,14 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
     }
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
@@ -68,8 +76,10 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
             <input
               type="text"
               className={styles.input}
+              id="title"
+              name="title"
               value={formData.title}
-              onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+              onChange={handleChange}
               required
             />
           </div>
@@ -78,8 +88,10 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
             <input
               type="text"
               className={styles.input}
+              id="city"
+              name="city"
               value={formData.city}
-              onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
+              onChange={handleChange}
               required
             />
           </div>
@@ -88,8 +100,10 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
             <input
               type="text"
               className={styles.input}
+              id="country"
+              name="country"
               value={formData.country}
-              onChange={(e) => setFormData(prev => ({ ...prev, country: e.target.value }))}
+              onChange={handleChange}
               required
             />
           </div>
@@ -97,15 +111,17 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
             <label className={styles.label}>Type</label>
             <select
               className={styles.select}
+              id="type"
+              name="type"
               value={formData.type}
-              onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value as EPinType }))}
+              onChange={handleChange}
+              required
             >
-              <option value={EPinType.Coffee}>Coffee</option>
-              <option value={EPinType.Event}>Event</option>
-              <option value={EPinType.Home}>Home</option>
-              <option value={EPinType.Picture}>Picture</option>
-              <option value={EPinType.Missing}>Missing</option>
-              <option value={EPinType.Goal}>Goal</option>
+              {Object.values(EPinType).map(type => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
             </select>
           </div>
           <button type="button" className={styles.cameraButton} onClick={handleCameraClick}>
@@ -128,9 +144,14 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
             />
           )}
           {error && <div className={styles.error}>{error}</div>}
-          <button type="submit" className={styles.submitButton}>
-            Add Pin
-          </button>
+          <div className={styles.buttonGroup}>
+            <button type="submit" className={styles.submitButton}>
+              Add Pin
+            </button>
+            <button type="button" onClick={onClose} className={styles.cancelButton}>
+              Cancel
+            </button>
+          </div>
         </form>
       </div>
     </div>

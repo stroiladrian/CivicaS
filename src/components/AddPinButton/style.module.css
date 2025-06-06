@@ -1,6 +1,6 @@
 .addPinButton {
   position: fixed;
-  bottom: 30vh;
+  bottom: 20vh;
   left: 50%;
   transform: translateX(-50%);
   background-color: #4ab8a9;

@@ -7,6 +7,7 @@ interface MapProps {
   pins: IPin[]
   onCenterChange?: (center: { lat: number; lng: number }) => void
   onZoomChange?: (zoom: number) => void
+  centerOnViewport?: boolean
 }
 
 const darkMapStyle = [
@@ -90,7 +91,7 @@ const darkMapStyle = [
   }
 ]
 
-export default function Map({ pins, onCenterChange, onZoomChange }: MapProps) {
+export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewport }: MapProps) {
   const mapRef = useRef<HTMLDivElement>(null)
   const [map, setMap] = useState<google.maps.Map | null>(null)
   const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(null)
@@ -314,5 +315,26 @@ export default function Map({ pins, onCenterChange, onZoomChange }: MapProps) {
     }
   }, [map, currentZoom, isDragging])
 
-  return <div ref={mapRef} className={styles.map} />
+  useEffect(() => {
+    if (map && centerOnViewport) {
+      const center = map.getCenter()
+      if (center) {
+        const lat = center.lat()
+        const lng = center.lng()
+        setCenter({ lat, lng })
+        if (onCenterChange) {
+          onCenterChange({ lat, lng })
+        }
+      }
+    }
+  }, [map, centerOnViewport, onCenterChange])
+
+  return (
+    <div className={styles.map}>
+      <div ref={mapRef} className={styles.map} />
+      <div className={styles.pinOverlay}>
+        <div className={styles.pinMarker} />
+      </div>
+    </div>
+  )
 } 

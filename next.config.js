@@ -11,13 +11,33 @@ const commitHash = require('child_process')
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['localhost'],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: '**',
       },
     ],
+  },
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: '*',
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+          },
+        ],
+      },
+    ]
   },
   webpack: (config) => {
     config.resolve.fallback = { fs: false, path: false }

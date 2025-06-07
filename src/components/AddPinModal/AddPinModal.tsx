@@ -31,8 +31,8 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!formData.title || !formData.description) {
-      setError('Please fill in all required fields')
+    if (!formData.title || !formData.description || !formData.photo) {
+      setError('Please fill in all required fields and add a photo')
       return
     }
     onSubmit({
@@ -56,6 +56,7 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
           ...prev,
           photo: reader.result as string
         }))
+        setError('') // Clear error when photo is added
       }
       reader.readAsDataURL(file)
     }
@@ -100,18 +101,21 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
               required
             />
           </div>
-          <button type="button" className={styles.cameraButton} onClick={handleCameraClick}>
-            <i className="bi bi-camera"></i>
-            Take Photo
-          </button>
-          <input
-            type="file"
-            ref={fileInputRef}
-            accept="image/*"
-            capture="environment"
-            onChange={handleFileChange}
-            className={styles.cameraInput}
-          />
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Photo *</label>
+            <button type="button" className={styles.cameraButton} onClick={handleCameraClick}>
+              <i className="bi bi-camera"></i>
+              {formData.photo ? 'Change Photo' : 'Take Photo'}
+            </button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/*"
+              capture="environment"
+              onChange={handleFileChange}
+              className={styles.cameraInput}
+            />
+          </div>
           {formData.photo && (
             <div className={styles.photoPreviewContainer}>
               <Image

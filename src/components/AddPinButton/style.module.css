@@ -3,7 +3,7 @@
   bottom: 20vh;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #4ab8a9;
+  background-color: #043a46;
   color: white;
   border: none;
   border-radius: 50px;
@@ -20,7 +20,7 @@
 }
 
 .addPinButton:hover {
-  background-color: #043a46;
+  background-color: #4ab8a9;
   transform: translateX(-50%) translateY(-2px);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }

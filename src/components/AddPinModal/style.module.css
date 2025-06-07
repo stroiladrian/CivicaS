@@ -54,9 +54,7 @@
   font-size: 1.1rem;
 }
 
-.input,
-.select,
-.textarea {
+.input {
   padding: 0.75rem;
   border: 1px solid #ddd;
   border-radius: 50px;
@@ -65,9 +63,13 @@
 }
 
 .textarea {
-  min-height: 100px;
-  resize: vertical;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
   border-radius: 25px;
+  font-size: 1rem;
+  background-color: #f8f8f8;
+  min-height: 150px;
+  resize: vertical;
 }
 
 .submitButton {
@@ -82,6 +84,7 @@
   margin-top: 1rem;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 .submitButton:hover {
@@ -97,24 +100,22 @@
 
 .error {
   color: #dc3545;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
 }
 
 .cameraButton {
   background-color: #4ab8a9;
   color: white;
-  padding: 20px 40px;
+  padding: 15px 30px;
   border: none;
   border-radius: 50px;
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 1.1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  width: 100%;
+  gap: 0.5rem;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -130,6 +131,10 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.cameraInput {
+  display: none;
+}
+
 .photoPreviewContainer {
   width: 100%;
   height: 300px;
@@ -141,8 +146,4 @@
 
 .photoPreview {
   border-radius: 25px;
-}
-
-.cameraInput {
-  display: none;
 } 

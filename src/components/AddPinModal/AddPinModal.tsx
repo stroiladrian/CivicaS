@@ -16,12 +16,13 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
     author: 'User',
     username: 'user',
     title: '',
-    city: '',
-    country: '',
+    description: '',
     coordinates: initialCoordinates ? [initialCoordinates.lat, initialCoordinates.lng] as [number, number] : [0, 0] as [number, number],
     date: new Date().toISOString().split('T')[0],
     photo: '',
-    type: EPinType.Picture
+    type: EPinType.Picture,
+    city: 'Unknown', // Default value for backward compatibility
+    country: 'Unknown' // Default value for backward compatibility
   })
   const [error, setError] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -30,11 +31,15 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!formData.title || !formData.city || !formData.country) {
+    if (!formData.title || !formData.description) {
       setError('Please fill in all required fields')
       return
     }
-    onSubmit(formData)
+    onSubmit({
+      ...formData,
+      city: formData.description, // Use description as city for display
+      country: 'Unknown' // Keep default country
+    })
     onClose()
   }
 
@@ -56,7 +61,7 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
@@ -85,45 +90,15 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
             />
           </div>
           <div className={styles.formGroup}>
-            <label className={styles.label}>City *</label>
-            <input
-              type="text"
-              className={styles.input}
-              id="city"
-              name="city"
-              value={formData.city}
+            <label className={styles.label}>Description *</label>
+            <textarea
+              className={styles.textarea}
+              id="description"
+              name="description"
+              value={formData.description}
               onChange={handleChange}
               required
             />
-          </div>
-          <div className={styles.formGroup}>
-            <label className={styles.label}>Country *</label>
-            <input
-              type="text"
-              className={styles.input}
-              id="country"
-              name="country"
-              value={formData.country}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label className={styles.label}>Type</label>
-            <select
-              className={styles.select}
-              id="type"
-              name="type"
-              value={formData.type}
-              onChange={handleChange}
-              required
-            >
-              {Object.values(EPinType).map(type => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
           </div>
           <button type="button" className={styles.cameraButton} onClick={handleCameraClick}>
             <i className="bi bi-camera"></i>
@@ -150,14 +125,9 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
             </div>
           )}
           {error && <div className={styles.error}>{error}</div>}
-          <div className={styles.buttonGroup}>
-            <button type="submit" className={styles.submitButton}>
-              Add Pin
-            </button>
-            <button type="button" onClick={onClose} className={styles.cancelButton}>
-              Cancel
-            </button>
-          </div>
+          <button type="submit" className={styles.submitButton}>
+            Add Pin
+          </button>
         </form>
       </div>
     </div>

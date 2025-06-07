@@ -250,7 +250,7 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
     }
 
     initMap()
-  }, [onCenterChange, onZoomChange, userLocation])
+  }, [onCenterChange, onZoomChange, userLocation, checkDistanceAndUpdateState])
 
   // Handle markers
   useEffect(() => {

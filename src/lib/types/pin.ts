@@ -1,12 +1,10 @@
 import { ETheme } from "./theme"
 
 export enum EPinType {
-  Coffee = 'coffee',
+  Place = 'place',
   Event = 'event',
-  Home = 'home',
-  Picture = 'picture',
-  Missing = 'missing',
-  Goal = 'goal'
+  Memory = 'memory',
+  Story = 'story'
 }
 
 export interface IPin {

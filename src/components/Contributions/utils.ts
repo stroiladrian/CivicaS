@@ -30,16 +30,26 @@ export function makeContributions(places: Place[], leaderKey: string): User[] {
   for (let i = 0; i < sortedPlaces.length; i++) {
     if (Array.isArray(sortedPlaces[i].username)) {
       for (let j = 0; j < sortedPlaces[i].username.length; j++) {
+        const author = Array.isArray(sortedPlaces[i].author) 
+          ? sortedPlaces[i].author[j] 
+          : sortedPlaces[i].author
+        const username = sortedPlaces[i].username[j]
+        
         users.push({
-          author: Array.isArray(sortedPlaces[i].author) ? sortedPlaces[i].author[j] : sortedPlaces[i].author,
-          username: sortedPlaces[i].username[j],
+          author: author,
+          username: username,
           coordinates: sortedPlaces[i].coordinates
         })
       }
     } else {
+      const author = Array.isArray(sortedPlaces[i].author) 
+        ? sortedPlaces[i].author[0] 
+        : sortedPlaces[i].author
+      const username = sortedPlaces[i].username
+      
       users.push({
-        author: Array.isArray(sortedPlaces[i].author) ? sortedPlaces[i].author[0] : sortedPlaces[i].author,
-        username: sortedPlaces[i].username,
+        author: author,
+        username: username,
         coordinates: sortedPlaces[i].coordinates
       })
     }

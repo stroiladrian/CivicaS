@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Contributor, ELeaderKeys } from './types'
-import { PLACES } from 'src/data/places'
+import { PLACES } from '../../utils/places'
 import {
   makeContributions,
   getOrdinals,
@@ -8,7 +8,7 @@ import {
   getBarStyle,
   getWidth,
   Contribution
-} from '@/utils/contributions'
+} from '../../utils/contributions'
 import { ETheme } from 'src/lib/types'
 import styles from './style.module.css'
 

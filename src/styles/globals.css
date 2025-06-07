@@ -14,14 +14,25 @@
   }
 }
 
-body {
+html, body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
   margin: 0;
   padding: 0;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
+}
+
+#__next {
+  height: 100%;
+  width: 100%;
+}
+
+.app {
+  height: 100%;
+  width: 100%;
+  position: relative;
 }
 
 ::-webkit-scrollbar {
@@ -65,4 +76,44 @@ body {
   width: 100%;
   height: 100vh;
   position: relative;
+}
+
+.error-boundary {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 1000;
+}
+
+.error-boundary h2 {
+  color: #e53e3e;
+  margin-bottom: 1rem;
+}
+
+.error-boundary button {
+  background: #4ab8a9;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s;
+}
+
+.error-boundary button:hover {
+  background: #3a9a8d;
+}
+
+@media (prefers-color-scheme: dark) {
+  .error-boundary {
+    background: #1a1a1a;
+    color: white;
+  }
 }

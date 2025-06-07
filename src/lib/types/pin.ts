@@ -4,7 +4,11 @@ export enum EPinType {
   Place = 'place',
   Event = 'event',
   Memory = 'memory',
-  Story = 'story'
+  Story = 'story',
+  Home = 'home',
+  Picture = 'picture',
+  Missing = 'missing',
+  Goal = 'goal'
 }
 
 export interface IPin {

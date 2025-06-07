@@ -13,7 +13,7 @@ const AddPinButton = ({ onClick }: Props) => {
   return (
     <button className={styles.addPinButton} onClick={handleClick}>
       <i className={`bi bi-plus-circle ${styles.icon}`}></i>
-      Add New Pin
+      Add New
     </button>
   )
 }

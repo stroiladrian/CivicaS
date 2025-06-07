@@ -146,4 +146,25 @@
 
 .photoPreview {
   border-radius: 25px;
+}
+
+.select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.select:hover {
+  border-color: #4ab8a9;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #4ab8a9;
+  box-shadow: 0 0 0 2px rgba(74, 184, 169, 0.2);
 } 

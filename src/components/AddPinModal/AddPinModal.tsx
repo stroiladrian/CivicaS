@@ -35,6 +35,20 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
       setError('Please fill in all required fields and add a photo')
       return
     }
+
+    const newPin: Omit<IPin, 'id'> = {
+      author: formData.author,
+      username: formData.username,
+      title: formData.title,
+      city: formData.description,
+      country: formData.country,
+      coordinates: formData.coordinates,
+      date: formData.date,
+      photo: formData.photo,
+      type: formData.type
+    }
+
+    onSubmit(newPin)
     onSubmit({
       ...formData,
       city: formData.description, // Use description as city for display
@@ -125,6 +139,7 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
                 height={300}
                 className={styles.photoPreview}
                 style={{ objectFit: 'cover' }}
+                priority
               />
             </div>
           )}

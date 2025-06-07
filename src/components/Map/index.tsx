@@ -109,13 +109,14 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
     const loader = new Loader({
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
       version: 'weekly',
-      libraries: ['places']
+      libraries: ['places', 'marker']
     })
 
     loader.load().then(() => {
       const mapInstance = new google.maps.Map(mapRef.current!, {
         center: { lat: 45.3889, lng: 21.2244 },
         zoom: 14,
+        mapId: 'map',
         mapTypeControl: false,
         streetViewControl: false,
         fullscreenControl: false,
@@ -145,23 +146,26 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
 
     // Create new markers
     const newMarkers = pins.map(pin => {
-      const marker = new google.maps.Marker({
+      if (!pin || !pin.coordinates) return null;
+      
+      const marker = new google.maps.marker.AdvancedMarkerElement({
         position: {
           lat: Array.isArray(pin.coordinates) ? pin.coordinates[0] : pin.coordinates.lat,
           lng: Array.isArray(pin.coordinates) ? pin.coordinates[1] : pin.coordinates.lng
         },
         map,
-        title: pin.title || pin.city,
-        icon: {
-          url: `/images/markers/${pin.type || 'picture'}-image.png`,
-          scaledSize: new google.maps.Size(40, 40)
-        },
-        animation: google.maps.Animation.DROP
+        title: pin.title || pin.city || 'Untitled Location',
+        content: new google.maps.marker.PinElement({
+          background: `/images/markers/${pin.type || 'picture'}-image.png`,
+          scale: 1
+        }).element
       })
 
-      const handleMarkerClick = (e: google.maps.MapMouseEvent) => {
+      console.log(`Pin type: ${pin.type}, Icon URL: /images/markers/${pin.type || 'picture'}-image.png`)
+
+      const handleMarkerClick = (e: Event) => {
         if (e) {
-          e.stop()
+          e.stopPropagation()
         }
         
         if (infoWindow) {
@@ -199,9 +203,9 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
         }
       }
 
-      marker.addListener('click', handleMarkerClick)
+      marker.addListener('gmp-click', handleMarkerClick)
       return marker
-    })
+    }).filter(Boolean) // Remove any null markers
 
     markersRef.current = newMarkers
     setMarkers(newMarkers)

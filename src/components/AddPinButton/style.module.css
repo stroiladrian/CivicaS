@@ -1,14 +1,14 @@
 .addPinButton {
   position: fixed;
-  bottom: 20vh;
+  bottom: 10vh;
   left: 50%;
   transform: translateX(-50%);
   background-color: #043a46;
   color: white;
   border: none;
   border-radius: 50px;
-  padding: 20px 40px;
-  font-size: 20px;
+  padding: 17px 34px;
+  font-size: 17px;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -16,7 +16,7 @@
   z-index: 1000;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .addPinButton:hover {
@@ -31,6 +31,6 @@
 }
 
 .icon {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
 } 

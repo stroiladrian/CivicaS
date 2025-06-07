@@ -27,7 +27,7 @@ const Location = ({
       lat: Array.isArray(coordinates) ? coordinates[0] : coordinates.lat,
       lng: Array.isArray(coordinates) ? coordinates[1] : coordinates.lng
     })
-    map.setZoom(10)
+    map.setZoom(15)
   }
 
   const getItalic = () => {

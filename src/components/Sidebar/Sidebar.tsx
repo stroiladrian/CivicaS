@@ -58,7 +58,7 @@ export default function Sidebar({ pins, isOpen, setOpen, mapRef }: Props) {
               <Link href="https://karamazfolio.xyz/">
                 <Image
                   src="/images/takeyouthere-logo.png"
-                  alt="'Take you there' original logo."
+                  alt="CivicaS logo"
                   width={120}
                   height={120}
                   style={{ cursor: 'pointer' }}

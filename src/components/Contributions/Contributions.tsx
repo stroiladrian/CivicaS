@@ -6,19 +6,14 @@ import {
   getOrdinals,
   getUsername,
   getBarStyle,
-  getWidth
-} from './utils'
+  getWidth,
+  Contribution
+} from '@/utils/contributions'
 import { ETheme } from 'src/lib/types'
 import styles from './style.module.css'
 
 interface ContributionsProps {
   theme: ETheme
-}
-
-interface Contribution {
-  value: number;
-  name: string;
-  leaderKey: string;
 }
 
 export default function Contributions({ theme }: ContributionsProps) {

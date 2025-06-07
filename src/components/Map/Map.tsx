@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import styles from './style.module.css'
-import { IPin } from '@/lib/types/pin'
+import { IPin } from 'src/lib/types'
 import { Loader } from '@googlemaps/js-api-loader'
 
 interface MapProps {

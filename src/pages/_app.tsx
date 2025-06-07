@@ -1,13 +1,9 @@
 import type { AppProps } from 'next/app'
-import { ThemeProvider } from 'src/hooks/useTheme'
-import 'src/styles/globals.css'
+import 'bootstrap-icons/font/bootstrap-icons.css'
+import '../styles/globals.css'
 
-function takeYouThere({ Component, pageProps }: AppProps) {
-  return (
-    <ThemeProvider>
-      <Component {...pageProps} />
-    </ThemeProvider>
-  )
+function CivicaS({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />
 }
 
-export default takeYouThere
+export default CivicaS

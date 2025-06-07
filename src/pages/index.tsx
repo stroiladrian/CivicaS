@@ -8,7 +8,7 @@ import type { IPin } from 'src/lib/types'
 
 const Map = dynamic(() => import('src/components/Map'), { ssr: false })
 
-const STORAGE_KEY = 'takeyouthere_pins'
+const STORAGE_KEY = 'civicas_pins'
 const MAX_STORAGE_SIZE = 4 * 1024 * 1024 // 4MB limit
 
 // Function to compress image

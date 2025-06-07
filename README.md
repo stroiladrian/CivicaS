@@ -1,6 +1,6 @@
-# Take You There
+# CivicaS
 
-A web application for sharing and discovering places around the world.
+A web application for sharing and discovering civic spaces and public places around the world.
 
 ## Features
 
@@ -8,6 +8,7 @@ A web application for sharing and discovering places around the world.
 - Add new locations with photos
 - Persistent storage of pins
 - Responsive design
+- Dark/Light theme support
 
 ## Deployment
 
@@ -44,6 +45,63 @@ This project is deployed on Vercel. To deploy your own version:
 - TypeScript
 - CSS Modules
 
+<div align="center">
+  <img src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB" alt="React" title="React" />
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" title="TypeScript" />
+  <img src="https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next JS" title="Next JS" />
+</div>
+
+---
+
+## Introduction
+
+CivicaS is an interactive map application that allows users to share and discover civic spaces and public places around the world. The app focuses on documenting and preserving memories of important public spaces, from historic landmarks to local community centers.
+
+Key features include:
+- Interactive map with custom markers
+- Photo documentation of locations
+- Persistent storage of pins
+- Responsive design for all devices
+- Dark/Light theme support
+- Location-based sorting and filtering
+
+## Structure
+
+The application consists of:
+
+1. An interactive map with customizable themes
+2. A sidebar menu with two main sections:
+   - Locations: Displays all pins with details about city, country, date, and author
+   - Contributions: Shows the number of pins added by each contributor
+
+## Features
+
+### Map Integration
+The application uses Google Maps API for a smooth and reliable mapping experience. The map supports:
+- Custom markers
+- Interactive info windows
+- Location-based features
+- Responsive design
+
+### Custom Pins
+Users can add pins with:
+- Title
+- Description
+- Photo
+- Location coordinates
+- Date
+
+### Theme Support
+The application supports both light and dark themes, providing a comfortable viewing experience in any environment.
+
+## Contributing
+
+Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting any changes.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 <p align="center">
   <a href="https://takeyouthere.vercel.app">
     <img src="/public/images/takeyouthere-pin.png" width="170" alt="'Take you there' original marker/pin."
@@ -53,12 +111,6 @@ This project is deployed on Vercel. To deploy your own version:
 <p align="center">
   <strong><span style="font-size: larger;">Madonna never specified "where", though</span></strong>
 </p>
-
-<div align="center">
-  <img src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB" alt="React" title="React" />
-  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" title="TypeScript" />
-  <img src="https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next JS" title="Next JS" />
-</div>
 
 <p align="center">
   <a href="https:/github.com/JuditKaramazov">🐱 /JuditKaramazov</a>

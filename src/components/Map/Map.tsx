@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import styles from './style.module.css'
 import { IPin } from 'src/lib/types'
 import { Loader } from '@googlemaps/js-api-loader'
@@ -60,7 +60,7 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
     return R * c // Distance in meters
   }
 
-  const checkDistanceAndUpdateState = () => {
+  const checkDistanceAndUpdateState = useCallback(() => {
     if (map && userLocation) {
       const center = map.getCenter()
       if (center) {
@@ -72,11 +72,8 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
           userLocation.lat,
           userLocation.lng
         )
-        console.log('Distance from user location:', distance, 'meters')
-        
-        // Show return button if moved more than 5 meters
+
         if (distance > 5) {
-          hasMovedFromInitial.current = true
           setShowReturnButton(true)
           setIsAtUserLocation(false)
         } else {
@@ -85,7 +82,13 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
         }
       }
     }
-  }
+  }, [map, userLocation])
+
+  useEffect(() => {
+    if (map && userLocation) {
+      checkDistanceAndUpdateState()
+    }
+  }, [map, userLocation, checkDistanceAndUpdateState])
 
   // Get initial location
   useEffect(() => {
@@ -118,12 +121,6 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
       )
     }
   }, [map])
-
-  useEffect(() => {
-    if (map && userLocation) {
-      checkDistanceAndUpdateState()
-    }
-  }, [map, userLocation, checkDistanceAndUpdateState])
 
   useEffect(() => {
     const initMap = async () => {

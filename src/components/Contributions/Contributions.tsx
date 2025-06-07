@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Contributor, ELeaderKeys } from './types'
+import { ELeaderKeys } from './types'
 import { PLACES } from '../../utils/places'
 import {
   makeContributions,
@@ -25,74 +25,39 @@ export default function Contributions({ theme }: ContributionsProps) {
     })
   }
 
-  const sortedContributions = useMemo(
-    () => sortContributions(leaderKey),
-    [leaderKey]
-  )
-
-  const getIcon = () => {
-    if (leaderKey === ELeaderKeys.Pins) {
-      return <i className="bi bi-pin-fill"></i>
-    }
-    return <i className="bi bi-signpost-fill"></i>
-  }
-
-  const getValue = (contributor: Contributor) => {
-    if (leaderKey === ELeaderKeys.Distance) {
-      return Math.round(contributor.value) + ' km'
-    }
-    return contributor.value
-  }
+  const sortedContributions = sortContributions(leaderKey)
+  const maxValue = useMemo(() => Math.max(...sortedContributions.map(c => c.value)), [sortedContributions])
 
   return (
     <div className={styles.contributions}>
-      <div className={styles.sort}>
-        <div className={`${styles.sort_back} ${theme === 'dark' ? styles.dark_theme : ''}`}>
-          <label>
-            <b>Leading by: </b>
-          </label>
-          <select
-            onChange={(e) => setLeaderKey(e.target.value as ELeaderKeys)}
-            className={styles.sort_button}
-          >
-            <option>Pins</option>
-            <option>Distance</option>
-          </select>
-        </div>
-      </div>
-      {sortedContributions.map((contribution: Contributor, index) => (
-        <div className={styles.line} key={index}>
-          <div className={styles.info}>
-            <div className={styles.position}>
-              {' '}
-              {index + 1}
-              {getOrdinals(index)}{' '}
-            </div>
-            <a
-              className={styles.name}
-              href={'https://github.com/' + contribution.username}
-              title={'Go to ' + contribution.author + "'s GitHub"}
-            >
-              {' '}
-              {contribution.author}{' '}
-              <div className={styles.username}>
-                {' '}
-                {getUsername(index, sortedContributions)}{' '}
+      <h2>Contributions</h2>
+      <div className={styles.contributionList}>
+        {sortedContributions.map((contribution, index) => (
+          <div className={styles.line} key={index}>
+            <div className={styles.info}>
+              <div className={styles.position}>
+                {getOrdinals(index)}
               </div>
-            </a>
-            <div className={styles.number}>
-              {' '}
-              {getValue(contribution)} {getIcon()}
+              <a
+                className={styles.name}
+                href={`https://github.com/${getUsername(contribution.name)}`}
+                title={`Go to ${contribution.name}'s GitHub`}
+              >
+                {contribution.name}
+                <div className={styles.username}>
+                  @{getUsername(contribution.name)}
+                </div>
+              </a>
+              <div className={styles.number}>
+                {contribution.value} points
+              </div>
+            </div>
+            <div className={styles.barContainer}>
+              <div style={getBarStyle(contribution.value, maxValue)} />
             </div>
           </div>
-          <div className={styles.progress}>
-            <div
-              className={getBarStyle(index)}
-              style={{ width: getWidth(index, sortedContributions) }}
-            ></div>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   )
 }

@@ -11,6 +11,9 @@
     "url": "https://github.com/stroiladrian/CivicaS"
   },
   "private": true,
+  "engines": {
+    "node": ">=18.17.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

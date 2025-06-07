@@ -3,15 +3,33 @@
     "target": "es5",
     "baseUrl": ".",
     "paths": {
-      "~/components/*": ["./components/*"],
-      "~/data/*": ["./data/*"],
-      "~/hooks/*": ["./hooks/*"],
-      "~/lib/*": ["./lib/*"],
-      "~/pages/*": ["./pages/*"],
-      "~/public/*": ["./public/*"],
-      "~/styles/*": ["./styles/*"]
+      "~/components/*": [
+        "./components/*"
+      ],
+      "~/data/*": [
+        "./data/*"
+      ],
+      "~/hooks/*": [
+        "./hooks/*"
+      ],
+      "~/lib/*": [
+        "./lib/*"
+      ],
+      "~/pages/*": [
+        "./pages/*"
+      ],
+      "~/public/*": [
+        "./public/*"
+      ],
+      "~/styles/*": [
+        "./styles/*"
+      ]
     },
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -23,8 +41,23 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "strictNullChecks": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

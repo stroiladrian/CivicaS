@@ -8,9 +8,10 @@ interface MapProps {
   onCenterChange?: (center: { lat: number; lng: number }) => void
   onZoomChange?: (zoom: number) => void
   centerOnViewport?: boolean
+  isModalOpen?: boolean
 }
 
-export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewport }: MapProps) {
+export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewport, isModalOpen }: MapProps) {
   const mapRef = useRef<HTMLDivElement>(null)
   const [map, setMap] = useState<google.maps.Map | null>(null)
   const [markers, setMarkers] = useState<google.maps.Marker[]>([])
@@ -18,13 +19,109 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
   const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(null)
   const [currentZoom, setCurrentZoom] = useState(14)
   const [center, setCenter] = useState({ lat: 45.3889, lng: 21.2244 })
+  const [isInfoWindowOpen, setIsInfoWindowOpen] = useState(false)
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [showReturnButton, setShowReturnButton] = useState(false)
+  const initialLocationSet = useRef(false)
+  const lastCenter = useRef<{ lat: number; lng: number } | null>(null)
+  const initialViewportSet = useRef(false)
+  const mapInitialized = useRef(false)
+  const hasMovedFromInitial = useRef(false)
+  const initialUserLocation = useRef<{ lat: number; lng: number } | null>(null)
+  const [isAtUserLocation, setIsAtUserLocation] = useState(false)
+
+  const moveToUserLocation = () => {
+    if (map && userLocation) {
+      map.setCenter(userLocation)
+      map.setZoom(15)
+      if (onCenterChange) {
+        onCenterChange(userLocation)
+      }
+      setShowReturnButton(false)
+      lastCenter.current = userLocation
+      hasMovedFromInitial.current = false
+      setIsAtUserLocation(true)
+    }
+  }
+
+  // Calculate distance between two points using Haversine formula
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    const R = 6371e3 // Earth's radius in meters
+    const φ1 = (lat1 * Math.PI) / 180
+    const φ2 = (lat2 * Math.PI) / 180
+    const Δφ = ((lat2 - lat1) * Math.PI) / 180
+    const Δλ = ((lon2 - lon1) * Math.PI) / 180
+
+    const a =
+      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2)
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+    return R * c // Distance in meters
+  }
+
+  const checkDistanceAndUpdateState = (currentCenter: google.maps.LatLng | null) => {
+    if (currentCenter && userLocation) {
+      const lat = currentCenter.lat()
+      const lng = currentCenter.lng()
+      const distance = calculateDistance(
+        lat,
+        lng,
+        userLocation.lat,
+        userLocation.lng
+      )
+      console.log('Distance from user location:', distance, 'meters')
+      
+      // Show return button if moved more than 5 meters
+      if (distance > 5) {
+        hasMovedFromInitial.current = true
+        setShowReturnButton(true)
+        setIsAtUserLocation(false)
+      } else {
+        setShowReturnButton(false)
+        setIsAtUserLocation(true)
+      }
+    }
+  }
+
+  // Get initial location
+  useEffect(() => {
+    if (navigator.geolocation && !initialLocationSet.current) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          }
+          console.log('Setting initial user location:', pos)
+          setUserLocation(pos)
+          initialUserLocation.current = pos
+          lastCenter.current = pos
+          initialLocationSet.current = true
+          
+          // If map is already initialized, check distance
+          if (mapInitialized.current && map) {
+            checkDistanceAndUpdateState(map.getCenter())
+          }
+        },
+        (error) => {
+          console.error('Error getting initial location:', error)
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        }
+      )
+    }
+  }, [map])
 
   useEffect(() => {
     const initMap = async () => {
       const loader = new Loader({
         apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
         version: 'weekly',
-        libraries: ['places']
+        libraries: ['places', 'geometry']
       })
 
       try {
@@ -35,8 +132,59 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
           mapId: 'civicas_map',
           mapTypeControl: false,
           streetViewControl: false,
-          fullscreenControl: false
+          fullscreenControl: false,
+          zoomControl: true,
+          zoomControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_CENTER
+          }
         })
+
+        // Add MyLocationControl
+        const myLocationControl = document.createElement('div')
+        myLocationControl.className = styles.myLocationControl
+        myLocationControl.innerHTML = `
+          <button class="${styles.myLocationButton}" title="Find my location">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 8C9.79 8 8 9.79 8 12C8 14.21 9.79 16 12 16C14.21 16 16 14.21 16 12C16 9.79 14.21 8 12 8ZM20.94 11C20.48 6.83 17.17 3.52 13 3.06V2C13 1.45 12.55 1 12 1C11.45 1 11 1.45 11 2V3.06C6.83 3.52 3.52 6.83 3.06 11H2C1.45 11 1 11.45 1 12C1 12.55 1.45 13 2 13H3.06C3.52 17.17 6.83 20.48 11 20.94V22C11 22.55 11.45 23 12 23C12.55 23 13 22.55 13 22V20.94C17.17 20.48 20.48 17.17 20.94 13H22C22.55 13 23 12.55 23 12C23 11.45 22.55 11 22 11H20.94ZM12 19C8.13 19 5 15.87 5 12C5 8.13 8.13 5 12 5C15.87 5 19 8.13 19 12C19 15.87 15.87 19 12 19Z" fill="#4ab8a9"/>
+            </svg>
+          </button>
+        `
+        
+        myLocationControl.addEventListener('click', () => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                const pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                }
+                console.log('Setting user location from button:', pos)
+                setUserLocation(pos)
+                initialUserLocation.current = pos
+                lastCenter.current = pos
+                mapInstance.setCenter(pos)
+                mapInstance.setZoom(15)
+                if (onCenterChange) {
+                  onCenterChange(pos)
+                }
+                setShowReturnButton(false)
+                hasMovedFromInitial.current = false
+                setIsAtUserLocation(true)
+              },
+              (error) => {
+                console.error('Error getting location:', error)
+              },
+              {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+              }
+            )
+          }
+        })
+
+        // Add the control to the map
+        mapInstance.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(myLocationControl)
 
         const infoWindowInstance = new google.maps.InfoWindow({
           maxWidth: 300
@@ -44,11 +192,13 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
 
         setMap(mapInstance)
         setInfoWindow(infoWindowInstance)
+        mapInitialized.current = true
 
         // Add click listener to map
         mapInstance.addListener('click', () => {
           if (infoWindowInstance) {
             infoWindowInstance.close()
+            setIsInfoWindowOpen(false)
           }
         })
 
@@ -67,19 +217,37 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
           if (newCenter) {
             const lat = newCenter.lat()
             const lng = newCenter.lng()
-            setCenter({ lat, lng })
+            const newPos = { lat, lng }
+            setCenter(newPos)
             if (onCenterChange) {
-              onCenterChange({ lat, lng })
+              onCenterChange(newPos)
             }
+            
+            checkDistanceAndUpdateState(newCenter)
+            lastCenter.current = newPos
           }
         })
+
+        // Add drag end listener
+        mapInstance.addListener('dragend', () => {
+          checkDistanceAndUpdateState(mapInstance.getCenter())
+        })
+
+        // Add bounds changed listener
+        mapInstance.addListener('bounds_changed', () => {
+          if (!initialViewportSet.current && userLocation) {
+            checkDistanceAndUpdateState(mapInstance.getCenter())
+            initialViewportSet.current = true
+          }
+        })
+
       } catch (error) {
         console.error('Error loading Google Maps:', error)
       }
     }
 
     initMap()
-  }, [onCenterChange, onZoomChange])
+  }, [onCenterChange, onZoomChange, userLocation])
 
   // Handle markers
   useEffect(() => {
@@ -134,6 +302,7 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
 
           infoWindow.setContent(content)
           infoWindow.open(map, marker)
+          setIsInfoWindowOpen(true)
         }
       }
 
@@ -165,12 +334,30 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
     }
   }, [map, centerOnViewport, onCenterChange])
 
+  const shouldShowPlus = !isModalOpen && !isInfoWindowOpen && isAtUserLocation
+
   return (
     <div className={styles.map}>
       <div ref={mapRef} className={styles.map} />
-      <div className={styles.pinOverlay}>
-        <div className={styles.pinMarker} />
-      </div>
+      {isAtUserLocation && (
+        <div className={styles.centerMarker}>
+          <div className={styles.sonarEffect} />
+          <div className={styles.pinMarker} />
+        </div>
+      )}
+      <div className={`${styles.centerPlus} ${!shouldShowPlus ? styles.hidden : ''}`} />
+      {showReturnButton && hasMovedFromInitial.current && (
+        <button 
+          className={styles.returnToLocationButton}
+          onClick={moveToUserLocation}
+          title="Return to my location"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 8C9.79 8 8 9.79 8 12C8 14.21 9.79 16 12 16C14.21 16 16 14.21 16 12C16 9.79 14.21 8 12 8ZM20.94 11C20.48 6.83 17.17 3.52 13 3.06V2C13 1.45 12.55 1 12 1C11.45 1 11 1.45 11 2V3.06C6.83 3.52 3.52 6.83 3.06 11H2C1.45 11 1 11.45 1 12C1 12.55 1.45 13 2 13H3.06C3.52 17.17 6.83 20.48 11 20.94V22C11 22.55 11.45 23 12 23C12.55 23 13 22.55 13 22V20.94C17.17 20.48 20.48 17.17 20.94 13H22C22.55 13 23 12.55 23 12C23 11.45 22.55 11 22 11H20.94ZM12 19C8.13 19 5 15.87 5 12C5 8.13 8.13 5 12 5C15.87 5 19 8.13 19 12C19 15.87 15.87 19 12 19Z" fill="#4ab8a9"/>
+          </svg>
+          Return to my location
+        </button>
+      )}
     </div>
   )
 } 

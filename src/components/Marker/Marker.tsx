@@ -3,16 +3,18 @@ import { Marker as MarkerContainer, Popup } from 'react-leaflet'
 import Image from 'next/image'
 import AuthorIcon from '../AuthorIcon'
 import { IPin } from 'src/lib/types'
+import { EPinType } from 'src/lib/enums'
 import { getIcon, getFullDateString } from './utils'
 import { getRelativeTimeString, getNameString, getDistance } from 'src/lib/utils'
 import styles from './style.module.css'
 
 const Marker = ({
-  type,
+  author,
+  username,
   coordinates,
+  type = EPinType.Place,
   city,
   country,
-  author,
   title,
   photo,
   date
@@ -51,6 +53,11 @@ const Marker = ({
               <span>
                 <AuthorIcon author={author} /> {name}
               </span>
+              {username && (
+                <div className={styles.username}>
+                  @{username}
+                </div>
+              )}
             </div>
           </div>
           <Image

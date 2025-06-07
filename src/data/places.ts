@@ -146,7 +146,7 @@ export const PLACES: IPin[] = [
   {
     author: 'Auregan Nedelec',
     username: 'AuNedelec',
-    type: EPinType.Goal,
+    type: EPinType.Place,
     city: 'Helsinki',
     country: 'Finland',
     coordinates: [60.1674881, 24.9427473],

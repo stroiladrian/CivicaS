@@ -4,6 +4,19 @@ import styles from './style.module.css'
 import { Contributor, User } from './types'
 import { getDistance } from 'src/lib/utils'
 
+interface User {
+  author: string;
+  username: string;
+  coordinates: [number, number];
+}
+
+interface Place {
+  author: string | string[];
+  username: string | string[];
+  coordinates: [number, number];
+  value: number;
+}
+
 function getSet(arr: User[]) {
   return arr.filter(
     (v, i, a) =>
@@ -17,109 +30,52 @@ function sortByDistance(a: User, b: User) {
   return d2 - d1
 }
 
-export function makeContributions(places: IPin[], type: string) {
-  const users = []
-  const contributions = []
-  const places_copy = places.slice()
-  const sortedPlaces = places_copy.sort(sortByOldest)
+export function makeContributions(places: Place[], leaderKey: string): User[] {
+  const users: User[] = []
+  const sortedPlaces = [...places].sort((a, b) => b.value - a.value)
 
-  for (var i = 0; i < sortedPlaces.length; i++) {
+  for (let i = 0; i < sortedPlaces.length; i++) {
     if (Array.isArray(sortedPlaces[i].username)) {
-      for (var j = 0; j < sortedPlaces[i].username.length; j++) {
+      for (let j = 0; j < sortedPlaces[i].username.length; j++) {
         users.push({
-          author: sortedPlaces[i].author[j],
+          author: Array.isArray(sortedPlaces[i].author) ? sortedPlaces[i].author[j] : sortedPlaces[i].author,
           username: sortedPlaces[i].username[j],
           coordinates: sortedPlaces[i].coordinates
         })
       }
     } else {
       users.push({
-        author: sortedPlaces[i].author,
+        author: Array.isArray(sortedPlaces[i].author) ? sortedPlaces[i].author[0] : sortedPlaces[i].author,
         username: sortedPlaces[i].username,
         coordinates: sortedPlaces[i].coordinates
       })
     }
   }
 
-  const userSet = getSet(users)
-
-  for (var i = 0; i < userSet.length; i++) {
-    var acc = 0
-
-    switch (type) {
-      case 'Pins': {
-        for (var j = 0; j < users.length; j++) {
-          if (userSet[i].username === users[j].username) {
-            acc++
-          }
-        }
-        break
-      }
-      case 'Distance': {
-        for (var j = 0; j < users.length; j++) {
-          if (userSet[i].username === users[j].username) {
-            acc += getDistance(users[j].coordinates)
-          }
-        }
-        break
-      }
-    }
-
-    contributions.push({
-      author: userSet[i].author,
-      username: userSet[i].username,
-      value: acc
-    })
-  }
-
-  return contributions
+  return users
 }
 
-export function getOrdinals(num: number) {
-  switch (num) {
-    case 0:
-      return 'st';
-    case 1:
-      return 'nd';
-    case 2:
-      return 'rd';
-    default:
-      return 'th';
-  }
+export function getOrdinals(index: number): string {
+  const ordinals = ['1st', '2nd', '3rd', '4th', '5th']
+  return ordinals[index] || `${index + 1}th`
 }
 
-export function getBarStyle(num: number) {
-  switch (num) {
-    case 0:
-      return styles.bar_first;
-    case 1:
-      return styles.bar_second;
-    case 2:
-      return styles.bar_third;
-    default:
-      return styles.bar;
-  }
+export function getBarStyle(index: number): string {
+  const colors = ['#4CAF50', '#2196F3', '#FFC107', '#9C27B0', '#F44336']
+  return colors[index % colors.length]
 }
 
-export function getWidth(index: number, contributions: Contributor[]) {
-  const maxValue = contributions[0].value
-  const value = contributions[index].value
-
-  return (value * 100) / maxValue + '%'
+export function getWidth(index: number, sortedPlaces: Place[]): string {
+  const maxValue = Math.max(...sortedPlaces.map(place => place.value))
+  const value = sortedPlaces[index].value
+  const percentage = (value / maxValue) * 100
+  return `${percentage}%`
 }
 
-export function getUsername(index: number, contributions: Contributor[]) {
-  const author = contributions[index].author
-
-  var acc = 0
-  for (var i = 0; i < contributions.length; i++) {
-    if (contributions[i].author === author) {
-      acc++
-    }
+export function getUsername(index: number, sortedPlaces: Place[]): string {
+  const place = sortedPlaces[index]
+  if (Array.isArray(place.username)) {
+    return place.username[0]
   }
-
-  if (acc > 1) {
-    return '@' + contributions[index].username
-  }
-  return ''
+  return place.username
 }

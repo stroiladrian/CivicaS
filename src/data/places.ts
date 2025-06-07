@@ -16,7 +16,7 @@ export const PLACES: IPin[] = [
   {
     author: 'Judit Lázaro',
     username: 'JuditKaramazov',
-    type: EPinType.Coffee,
+    type: EPinType.Place,
     title : 'La Central',
     city: 'Barcelona',
     country: 'Spain',
@@ -27,7 +27,7 @@ export const PLACES: IPin[] = [
   {
     author: 'Auregan Nedelec',
     username: 'AuNedelec',
-    type: EPinType.Picture,
+    type: EPinType.Place,
     title : 'Parque de la Ciutadella',
     city: 'Barcelona',
     country: 'Spain',
@@ -38,7 +38,7 @@ export const PLACES: IPin[] = [
   {
     author: 'Auregan Nedelec',
     username: 'AuNedelec',
-    type: EPinType.Coffee,
+    type: EPinType.Place,
     title : 'Kahiki',
     city: 'Barcelona',
     country: 'Spain',
@@ -49,7 +49,7 @@ export const PLACES: IPin[] = [
 {
   author: 'Auregan Nedelec',
   username: 'AuNedelec',
-  type: EPinType.Coffee,
+  type: EPinType.Place,
   title : 'Mescladís del Pou',
   city: 'Barcelona',
   country: 'Spain',
@@ -71,7 +71,7 @@ export const PLACES: IPin[] = [
   {
     author: 'Auregan Nedelec',
     username: 'AuNedelec',
-    type: EPinType.Coffee,
+    type: EPinType.Place,
     title : 'Les gens que j\'aime',
     city: 'Barcelona',
     country: 'Spain',
@@ -82,7 +82,7 @@ export const PLACES: IPin[] = [
   {
     author: 'Auregan Nedelec',
     username: 'AuNedelec',
-    type: EPinType.Coffee,
+    type: EPinType.Place,
     title : 'Hidden Coffee Roasters',
     city: 'Barcelona',
     country: 'Spain',
@@ -93,7 +93,7 @@ export const PLACES: IPin[] = [
   {
     author: 'Auregan Nedelec',
     username: 'AuNedelec',
-    type: EPinType.Picture,
+    type: EPinType.Place,
     title : 'Castell de Montjuïc',
     city: 'Montjuïc, Barcelona',
     country: 'Spain',
@@ -104,7 +104,7 @@ export const PLACES: IPin[] = [
   {
     author: 'Judit Lázaro',
     username: 'JuditKaramazov',
-    type: EPinType.Home,
+    type: EPinType.Place,
     city: 'Engelhartszell an der Donau',
     country: 'Austria',
     coordinates: [48.5070, 13.7321],
@@ -125,7 +125,7 @@ export const PLACES: IPin[] = [
   {
     author: 'Judit Lázaro',
     username: 'JuditKaramazov',
-    type: EPinType.Home,
+    type: EPinType.Place,
     city: 'Granollers',
     country: 'Spain',
     coordinates: [41.598167419433594, 2.283038854598999],
@@ -135,7 +135,7 @@ export const PLACES: IPin[] = [
   {
     author: 'Auregan Nedelec',
     username: 'AuNedelec',
-    type: EPinType.Coffee,
+    type: EPinType.Place,
     title : "Palo Santo",
     city: 'Granollers',
     country: 'Spain',
@@ -156,7 +156,7 @@ export const PLACES: IPin[] = [
   {
     author: 'Auregan Nedelec',
     username: 'AuNedelec',
-    type: EPinType.Picture,
+    type: EPinType.Place,
     city: 'Krakóv',
     country: 'Poland',
     coordinates: [50.049683, 19.944544],
@@ -166,7 +166,7 @@ export const PLACES: IPin[] = [
   {
     author: 'Auregan Nedelec',
     username: 'AuNedelec',
-    type: EPinType.Coffee,
+    type: EPinType.Place,
     title : 'Europeska',
     city: 'Krakóv',
     country: 'Poland',
@@ -188,7 +188,7 @@ export const PLACES: IPin[] = [
   {
     author: 'Auregan Nedelec',
     username: 'AuNedelec',
-    type: EPinType.Coffee,
+    type: EPinType.Place,
     title : 'Lyon Particule',
     city: 'Lyon',
     country: 'France',

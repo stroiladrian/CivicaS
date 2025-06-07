@@ -59,7 +59,7 @@ export const getRelativeTimeString = (date: string) => {
     return 'Invalid date'
   }
   return dateTime
-    .toRelative(Date.now())
+    .toRelative({ base: DateTime.now() })
     .toLocaleString(DateTime.DATETIME_MED)
 }
 

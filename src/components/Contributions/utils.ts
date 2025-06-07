@@ -1,14 +1,7 @@
-import { sortByOldest } from 'src/lib/utils'
 import { IPin } from 'src/lib/types'
 import styles from './style.module.css'
 import { Contributor, User } from './types'
 import { getDistance } from 'src/lib/utils'
-
-interface User {
-  author: string;
-  username: string;
-  coordinates: [number, number];
-}
 
 interface Place {
   author: string | string[];

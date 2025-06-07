@@ -221,12 +221,9 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
         mapInstance.addListener('center_changed', () => {
           const newCenter = mapInstance.getCenter()
           if (newCenter) {
-            const lat = newCenter.lat()
-            const lng = newCenter.lng()
-            const newPos = { lat, lng }
-            setCenter(newPos)
-            if (onCenterChange) {
-              onCenterChange(newPos)
+            const newPos = {
+              lat: newCenter.lat(),
+              lng: newCenter.lng()
             }
             
             checkDistanceAndUpdateState()

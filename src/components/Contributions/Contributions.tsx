@@ -15,10 +15,16 @@ interface ContributionsProps {
   theme: ETheme
 }
 
+interface Contribution {
+  value: number;
+  name: string;
+  leaderKey: string;
+}
+
 export default function Contributions({ theme }: ContributionsProps) {
   const [leaderKey, setLeaderKey] = useState<ELeaderKeys>(ELeaderKeys.Pins)
 
-  function sortContributions(leaderKey) {
+  function sortContributions(leaderKey: string): Contribution[] {
     return makeContributions(PLACES, leaderKey).sort((a, b) => {
       return b.value - a.value
     })
@@ -59,7 +65,7 @@ export default function Contributions({ theme }: ContributionsProps) {
           </select>
         </div>
       </div>
-      {sortedContributions.map((contributor: Contributor, index) => (
+      {sortedContributions.map((contribution: Contributor, index) => (
         <div className={styles.line} key={index}>
           <div className={styles.info}>
             <div className={styles.position}>
@@ -69,11 +75,11 @@ export default function Contributions({ theme }: ContributionsProps) {
             </div>
             <a
               className={styles.name}
-              href={'https://github.com/' + contributor.username}
-              title={'Go to ' + contributor.author + "'s GitHub"}
+              href={'https://github.com/' + contribution.username}
+              title={'Go to ' + contribution.author + "'s GitHub"}
             >
               {' '}
-              {contributor.author}{' '}
+              {contribution.author}{' '}
               <div className={styles.username}>
                 {' '}
                 {getUsername(index, sortedContributions)}{' '}
@@ -81,7 +87,7 @@ export default function Contributions({ theme }: ContributionsProps) {
             </a>
             <div className={styles.number}>
               {' '}
-              {getValue(contributor)} {getIcon()}
+              {getValue(contribution)} {getIcon()}
             </div>
           </div>
           <div className={styles.progress}>

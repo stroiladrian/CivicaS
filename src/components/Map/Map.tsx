@@ -60,26 +60,29 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
     return R * c // Distance in meters
   }
 
-  const checkDistanceAndUpdateState = (currentCenter: google.maps.LatLng | null) => {
-    if (currentCenter && userLocation) {
-      const lat = currentCenter.lat()
-      const lng = currentCenter.lng()
-      const distance = calculateDistance(
-        lat,
-        lng,
-        userLocation.lat,
-        userLocation.lng
-      )
-      console.log('Distance from user location:', distance, 'meters')
-      
-      // Show return button if moved more than 5 meters
-      if (distance > 5) {
-        hasMovedFromInitial.current = true
-        setShowReturnButton(true)
-        setIsAtUserLocation(false)
-      } else {
-        setShowReturnButton(false)
-        setIsAtUserLocation(true)
+  const checkDistanceAndUpdateState = () => {
+    if (map && userLocation) {
+      const center = map.getCenter()
+      if (center) {
+        const lat = center.lat()
+        const lng = center.lng()
+        const distance = calculateDistance(
+          lat,
+          lng,
+          userLocation.lat,
+          userLocation.lng
+        )
+        console.log('Distance from user location:', distance, 'meters')
+        
+        // Show return button if moved more than 5 meters
+        if (distance > 5) {
+          hasMovedFromInitial.current = true
+          setShowReturnButton(true)
+          setIsAtUserLocation(false)
+        } else {
+          setShowReturnButton(false)
+          setIsAtUserLocation(true)
+        }
       }
     }
   }
@@ -101,7 +104,7 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
           
           // If map is already initialized, check distance
           if (mapInitialized.current && map) {
-            checkDistanceAndUpdateState(map.getCenter())
+            checkDistanceAndUpdateState()
           }
         },
         (error) => {
@@ -115,6 +118,12 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
       )
     }
   }, [map])
+
+  useEffect(() => {
+    if (map && userLocation) {
+      checkDistanceAndUpdateState()
+    }
+  }, [map, userLocation, checkDistanceAndUpdateState])
 
   useEffect(() => {
     const initMap = async () => {
@@ -223,20 +232,20 @@ export default function Map({ pins, onCenterChange, onZoomChange, centerOnViewpo
               onCenterChange(newPos)
             }
             
-            checkDistanceAndUpdateState(newCenter)
+            checkDistanceAndUpdateState()
             lastCenter.current = newPos
           }
         })
 
         // Add drag end listener
         mapInstance.addListener('dragend', () => {
-          checkDistanceAndUpdateState(mapInstance.getCenter())
+          checkDistanceAndUpdateState()
         })
 
         // Add bounds changed listener
         mapInstance.addListener('bounds_changed', () => {
           if (!initialViewportSet.current && userLocation) {
-            checkDistanceAndUpdateState(mapInstance.getCenter())
+            checkDistanceAndUpdateState()
             initialViewportSet.current = true
           }
         })

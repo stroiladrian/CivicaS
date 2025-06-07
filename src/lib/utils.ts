@@ -54,7 +54,11 @@ export const getNameString = (authors: string[] | string) => {
 // getRelativeTimeString() - Used on Location and Marker components.
 
 export const getRelativeTimeString = (date: string) => {
-  return DateTime.fromISO(date)
+  const dateTime = DateTime.fromISO(date)
+  if (!dateTime.isValid) {
+    return 'Invalid date'
+  }
+  return dateTime
     .toRelative(Date.now())
     .toLocaleString(DateTime.DATETIME_MED)
 }

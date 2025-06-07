@@ -20,7 +20,7 @@ export default function AddPinModal({ isOpen, onClose, onSubmit, initialCoordina
     coordinates: initialCoordinates ? [initialCoordinates.lat, initialCoordinates.lng] as [number, number] : [0, 0] as [number, number],
     date: new Date().toISOString().split('T')[0],
     photo: '',
-    type: EPinType.Picture,
+    type: EPinType.Place,
     city: 'Unknown', // Default value for backward compatibility
     country: 'Unknown' // Default value for backward compatibility
   })
